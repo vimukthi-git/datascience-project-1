@@ -1,0 +1,19 @@
+Data preparation
+================
+
+- Extract the stock market data from Yahoo Finance API as CSV.
+- Extract the political events data from clinecenter.illinois.edu/research/speed-data.html.
+- Import above data into MySQL database.
+- Correct datatypes in the db such as dates.
+- Add the code reference of the political event set to the db.
+- Understanding the political event dataset.
+- Convert the political event set to a more manageable size with fewer variables. date range 1971-2005
+        variables - year, month, date, severity=((number killed * 2) + number injured) * event type weight
+        when two events coincide severity will be summed.
+- Convert NASDAQ and SNP data to a manageable size - date range 1971-2005 - variables year, month, date, adj-close rate of change
+        assume no change of rate of change for the days where no data is available
+
+Data analysis
+=============
+
+- Focus on correlation between USA indexes and events.
