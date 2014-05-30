@@ -3,7 +3,7 @@ __author__ = 'vimukthi'
 DATABASE_SERVER = 'localhost'
 DATABASE_NAME = 'datascience_project'
 DATABASE_USER = 'root'
-DATABASE_PASSWORD = 'mit@12345'
+DATABASE_PASSWORD = '*****'
 
 SQL = {
     'SNP': 'select * from snp_usa',
