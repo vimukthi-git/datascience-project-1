@@ -19,14 +19,6 @@ def main():
     global nasdaq
     global usa_events
     global usa_processed
-    #p = optparse.OptionParser()
-    #p.add_option('--person', '-p', default="world")
-    #options, arguments = p.parse_args()
-    #print 'Hello %s' % options.person
-
-    prosd = psql.frame_query(config.SQL.get('USA_PROCESSED'), con=mysql_cn)
-    plt.plot(prosd.date, prosd.event_severity, '-', linewidth=1)
-    plt.show()
     with mysql_cn:
         snp = psql.frame_query(config.SQL.get('SNP'), con=mysql_cn)
         nasdaq = psql.frame_query(config.SQL.get('NASDAQ'), con=mysql_cn)
@@ -34,11 +26,27 @@ def main():
         usa_processed = psql.frame_query(config.SQL.get('USA_PROCESSED'), con=mysql_cn)
         #fill_trading_stats_in_db()
         #fill_event_severity()
+        show_stocks_correlation()
         calc_correlation()
         #cleanup()
 
+def show_stocks_correlation():
+    plt.gca().set_color_cycle([ 'red', 'yellow', 'green', 'blue'])
+    plt.plot(usa_processed.date, usa_processed.nasdaq_adj_close_rate)
+    plt.plot(usa_processed.date, usa_processed.snp_adj_close_rate)
+    plt.legend(['NASDAQ adjusted closing price', 'S&P500 adjusted closing price'], loc='upper left')
+    plt.show()
+    print usa_processed['snp_adj_close_rate'].corr(usa_processed['nasdaq_adj_close_rate'], method='spearman')
+
 def calc_correlation():
-    #print usa_processed['snp_adj_close_rate'].corr(usa_processed['event_severity'], method='spearman')
+    fig, plot1 = plt.subplots()
+    plot1.plot(usa_processed.date, usa_processed.event_severity)
+    plot1.set_ylabel('Event severity')
+    plot2 = plot1.twinx()
+    plot2.plot(usa_processed.date, usa_processed.nasdaq_adj_close_rate)
+    plot2.plot(usa_processed.date, usa_processed.snp_adj_close_rate)
+    plot2.set_ylabel('Indexes')
+    plt.show()
     print usa_processed.corr()
 
 def fill_trading_stats_in_db():
